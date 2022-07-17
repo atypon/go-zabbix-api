@@ -36,22 +36,25 @@ func testDeleteItem(item *zapi.Item, t *testing.T) {
 func TestItems(t *testing.T) {
 	api := testGetAPI(t)
 
-	//group := testCreateHostGroup(t)
-	//defer testDeleteHostGroup(group, t)
-	//
-	//host := testCreateHost(group, t)
-	//defer testDeleteHost(host, t)
+	group := testCreateHostGroup(t)
+	defer testDeleteHostGroup(group, t)
 
-	//app := testCreateApplication(host, t)
-	//defer testDeleteApplication(app, t)
+	host := testCreateHost(group, t)
+	defer testDeleteHost(host, t)
 
-	//items, err := api.ItemsGetByApplicationID(app.ApplicationID)
-	//if err != nil {
-	//	t.Fatal(err)
-	//}
-	//if len(items) != 0 {
-	//	t.Fatal("Found items")
-	//}
+	// Applications are deprecated
+	/*
+		app := testCreateApplication(host, t)
+		defer testDeleteApplication(app, t)
+
+		items, err := api.ItemsGetByApplicationID(app.ApplicationID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(items) != 0 {
+			t.Fatal("Found items")
+		}
+	*/
 
 	item := testCreateItem(t)
 
