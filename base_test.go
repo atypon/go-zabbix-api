@@ -68,8 +68,8 @@ func TestBadCalls(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if res.Error.Code != -32602 {
-		t.Errorf("Expected code -32602, got %s", res.Error)
+	if res.Error.Code != -32602 && res.Error.Code != -32600 {
+		t.Errorf("Expected code -32602/-32600, got %s", res.Error)
 	}
 }
 
