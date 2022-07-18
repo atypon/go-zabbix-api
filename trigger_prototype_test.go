@@ -31,10 +31,10 @@ func testDeleteTriggerPrototype(trigger *dd.TriggerPrototype, t *testing.T) {
 func testTriggerPrototype(t *testing.T) {
 	api := testGetAPI(t)
 
-	hostGroup := testCreateHostGroup(t)
-	defer testDeleteHostGroup(hostGroup, t)
+	templateGroup := testCreateTemplateGroup(t)
+	defer testDeleteTemplateGroup(templateGroup, t)
 
-	template := testCreateTemplate(hostGroup, t)
+	template := testCreateTemplate(templateGroup, t)
 	defer testDeleteTemplate(template, t)
 
 	lldRule := testCreateLLDRule(template, t)

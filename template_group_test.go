@@ -1,15 +1,17 @@
 package zabbix_test
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	zapi "github.com/claranet/go-zabbix-api"
 )
 
 func testCreateTemplateGroup(t *testing.T) *zapi.TemplateGroup {
-
+	now := time.Now()
 	templateGroups := zapi.TemplateGroups{zapi.TemplateGroup{
-		Name: "template group name",
+		Name: "template group name" + fmt.Sprint(now.UnixNano()),
 	}}
 	err := testGetAPI(t).TemplateGroupCreate(templateGroups)
 	if err != nil {

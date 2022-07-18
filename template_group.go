@@ -2,7 +2,7 @@ package zabbix
 
 // TemplateGroup represent Zabbix Template Group type returned from Zabbix API
 type TemplateGroup struct {
-	Name     string `json:"name"`
+	Name     string `json:"name,omitempty"`
 	GroupIDs string `json:"groupids,omitempty"`
 	GroupID  string `json:"groupid,omitempty"`
 }
