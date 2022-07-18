@@ -8,7 +8,7 @@ type Template struct {
 	Description     string     `json:"description,omitempty"`
 	Name            string     `json:"name,omitempty"`
 	Groups          HostGroups `json:"groups"`
-	UserMacros      Macros     `json:"macros"`
+	UserMacros      Macros     `json:"macros,omitempty"`
 	LinkedTemplates Templates  `json:"templates,omitempty"`
 	TemplatesClear  Templates  `json:"templates_clear,omitempty"`
 	LinkedHosts     Hosts      `json:"hosts,omitempty"`

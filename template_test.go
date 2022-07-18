@@ -29,9 +29,13 @@ func TestTemplates(t *testing.T) {
 	api := testGetAPI(t)
 
 	hostGroup := testCreateHostGroup(t)
+
+	// UglyFix the create template API in 6.2 doesn't support group's name in the groups list
+	hostGroupTmp := zapi.HostGroups{{GroupID: hostGroup.GroupID}}[0]
+
 	defer testDeleteHostGroup(hostGroup, t)
 
-	template := testCreateTemplate(hostGroup, t)
+	template := testCreateTemplate(&hostGroupTmp, t)
 	if template.TemplateID == "" {
 		t.Errorf("Template id is empty %#v", template)
 	}
