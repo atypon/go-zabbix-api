@@ -7,9 +7,12 @@ import (
 )
 
 func testCreateTemplate(hostGroup *zapi.HostGroup, t *testing.T) *zapi.Template {
+	// UglyFix the create template API in 6.2 doesn't support group's name in the groups list
+	hostGroupTmp := zapi.HostGroups{{GroupID: hostGroup.GroupID}}[0]
+
 	template := zapi.Templates{zapi.Template{
 		Host:   "template name",
-		Groups: zapi.HostGroups{*hostGroup},
+		Groups: zapi.HostGroups{hostGroupTmp},
 	}}
 	err := testGetAPI(t).TemplatesCreate(template)
 	if err != nil {
@@ -30,12 +33,9 @@ func TestTemplates(t *testing.T) {
 
 	hostGroup := testCreateHostGroup(t)
 
-	// UglyFix the create template API in 6.2 doesn't support group's name in the groups list
-	hostGroupTmp := zapi.HostGroups{{GroupID: hostGroup.GroupID}}[0]
-
 	defer testDeleteHostGroup(hostGroup, t)
 
-	template := testCreateTemplate(&hostGroupTmp, t)
+	template := testCreateTemplate(hostGroup, t)
 	if template.TemplateID == "" {
 		t.Errorf("Template id is empty %#v", template)
 	}
