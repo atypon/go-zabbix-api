@@ -12,28 +12,17 @@ func testCreateAction(t *testing.T) *zapi.Action {
 	now := time.Now()
 	Actions := zapi.Actions{zapi.Action{
 		Name:        "action name" + fmt.Sprint(now.UnixNano()),
-		EventSource: zapi.InternalSource,
+		EventSource: zapi.InternalEventSource,
 		Operations: zapi.Operations{
 			zapi.Operation{
-				OperationType: zapi.SendMessageOperation,
-				OpMessage: zapi.OpMessage{
-					Message:     "hi",
+				OperationType: zapi.SendMessageOperationType,
+				OpMessage: &zapi.OpMessage{
+					DefaultMsg:  1,
 					MediaTypeID: "1",
 				},
 				OpMessageGrp: zapi.OpMessageGrps{
 					zapi.OpMessageGrp{
 						UsrGrpID: "7",
-					},
-				},
-			},
-			zapi.Operation{
-				OperationType: zapi.GlobalScriptOperation,
-				OpCommand: zapi.OpCommand{
-					ScriptID: "3",
-				},
-				OpCommandGrp: zapi.OpCommandGrps{
-					zapi.OpCommandGrp{
-						Groupid: "3",
 					},
 				},
 			},

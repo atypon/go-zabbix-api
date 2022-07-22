@@ -104,6 +104,7 @@ func (api *API) callBytes(method string, params interface{}) (b []byte, err erro
 		return
 	}
 	api.printf("Request (POST): %s", b)
+	//fmt.Printf("Request (POST): %s\n", b)
 
 	req, err := http.NewRequest("POST", api.url, bytes.NewReader(b))
 	if err != nil {
