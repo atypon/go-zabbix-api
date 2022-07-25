@@ -16,10 +16,10 @@ func TestAuth(t *testing.T) {
 }
 
 func TestSetAuth(t *testing.T) {
-	api, err := testGetAPI(t).AuthSet(zapi.Params{
-		"authentication_type": 0,
-		"http_auth_enabled":   0,
-		"http_case_sensitive": 1})
+	api, err := testGetAPI(t).AuthSet(zapi.AuthPrototype{
+		HttpAuthEnabled:   0,
+		HttpCaseSensitive: "1",
+		LdapConfigured:    "0"})
 
 	if err != nil {
 		t.Fatal(err)
