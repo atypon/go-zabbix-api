@@ -118,7 +118,7 @@ type Item struct {
 	TrapperHosts string    `json:"trapper_hosts,omitempty"`
 
 	// Fields below used only when creating applications
-	ApplicationIds []string `json:"applications,omitempty"`
+	//ApplicationIds []string `json:"applications,omitempty"`
 
 	ItemParent Hosts `json:"hosts"`
 }
@@ -165,10 +165,10 @@ func (api *API) ItemGetByID(id string) (res *Item, err error) {
 	return
 }
 
-// ItemsGetByApplicationID Gets items by application Id.
-func (api *API) ItemsGetByApplicationID(id string) (res Items, err error) {
-	return api.ItemsGet(Params{"applicationids": id})
-}
+//// ItemsGetByApplicationID Gets items by application Id.
+//func (api *API) ItemsGetByApplicationID(id string) (res Items, err error) {
+//	return api.ItemsGet(Params{"applicationids": id})
+//}
 
 // ItemsCreate Wrapper for item.create
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/item/create

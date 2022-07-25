@@ -6,10 +6,14 @@ import (
 	zapi "github.com/claranet/go-zabbix-api"
 )
 
-func testCreateTemplate(hostGroup *zapi.HostGroup, t *testing.T) *zapi.Template {
+func testCreateTemplate(templateGroup *zapi.TemplateGroup, t *testing.T) *zapi.Template {
+
+	templateGroup.Name = ""
+	templateGroup.GroupID = templateGroup.GroupIDs
+	templateGroup.GroupIDs = ""
 	template := zapi.Templates{zapi.Template{
 		Host:   "template name",
-		Groups: zapi.HostGroups{*hostGroup},
+		Groups: zapi.TemplateGroups{*templateGroup},
 	}}
 	err := testGetAPI(t).TemplatesCreate(template)
 	if err != nil {
@@ -28,10 +32,11 @@ func testDeleteTemplate(template *zapi.Template, t *testing.T) {
 func TestTemplates(t *testing.T) {
 	api := testGetAPI(t)
 
-	hostGroup := testCreateHostGroup(t)
-	defer testDeleteHostGroup(hostGroup, t)
+	templateGroup := testCreateTemplateGroup(t)
 
-	template := testCreateTemplate(hostGroup, t)
+	defer testDeleteTemplateGroup(templateGroup, t)
+
+	template := testCreateTemplate(templateGroup, t)
 	if template.TemplateID == "" {
 		t.Errorf("Template id is empty %#v", template)
 	}

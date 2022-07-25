@@ -17,7 +17,7 @@ const (
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/hostgroup/object
 type HostGroup struct {
 	GroupID  string       `json:"groupid,omitempty"`
-	Name     string       `json:"name"`
+	Name     string       `json:"name,omitempty"`
 	Internal InternalType `json:"internal,omitempty,string"`
 }
 
