@@ -38,6 +38,9 @@ func (api *API) HostGroupsGet(params Params) (res HostGroups, err error) {
 	if _, present := params["output"]; !present {
 		params["output"] = "extend"
 	}
+	if params["output"] != "extend" {
+		params["output"] = "extend"
+	}
 	err = api.CallWithErrorParse("hostgroup.get", params, &res)
 	return
 }

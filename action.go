@@ -231,8 +231,8 @@ type ActionOperationCondition struct {
 type ActionOperationConditions []ActionOperationCondition
 
 type ActionOperationHostGroup struct {
-	OperationID string `json:"operationid,omitempty"`
-	GroupID     string `json:"groupid"`
+	//OperationID string `json:"operationid,omitempty"`
+	GroupID string `json:"groupid"`
 }
 
 type ActionOperationHostGroups []ActionOperationHostGroup
@@ -260,8 +260,8 @@ type ActionOperationMessageUser struct {
 type ActionOperationMessageUsers []ActionOperationMessageUser
 
 type ActionOperationTemplate struct {
-	OperationID string `json:"operationid,omitempty"`
-	TemplateID  string `json:"templateid"`
+	//OperationID string `json:"operationid"`
+	TemplateID string `json:"templateid"`
 }
 
 type ActionOperationTemplates []ActionOperationTemplate
@@ -286,7 +286,7 @@ type ActionRecoveryOperation struct {
 type ActionRecoveryOperations []ActionRecoveryOperation
 
 type ActionUpdateOperation struct {
-	OperationID       string                           `json:"operationid,omitempty"`
+	//OperationID       string                           `json:"operationid,omitempty"`
 	OperationType     ActionOperationType              `json:"operationtype,string"`
 	Command           *ActionOperationCommand          `json:"opcommand,omitempty"`
 	CommandHostGroups ActionOperationCommandHostGroups `json:"opcommand_grp,omitempty"`
