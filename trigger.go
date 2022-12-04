@@ -53,17 +53,20 @@ type TriggerFunctions []TriggerFunction
 // Trigger represent Zabbix trigger object
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/trigger/object
 type Trigger struct {
-	TriggerID   string `json:"triggerid,omitempty"`
-	Description string `json:"description"`
-	Expression  string `json:"expression"`
-	Comments    string `json:"comments"`
-	//TemplateId  string    `json:"templateid"`
-	//Value ValueType `json:""`
-
-	Priority     SeverityType     `json:"priority,string"`
+	TriggerID string `json:"triggerid,omitempty"`
+	//TemplateID   string           `json:"templateid,omitempty"`
+	Expression   string           `json:"expression"`
+	Comment      string           `json:"comments"`
+	ManualClose  string           `json:"manual_close,omitempty"`
+	UUID         string           `json:"uuid,omitempty"`
+	RecoveryMode string           `json:"recovery_mode,omitempty"`
+	RecoveryExp  string           `json:"recovery_expression,omitempty"`
+	Name         string           `json:"description,omitempty"`
+	Priority     int              `json:"priority,string"`
 	Status       StatusType       `json:"status,string"`
 	Dependencies Triggers         `json:"dependencies,omitempty"`
 	Functions    TriggerFunctions `json:"functions,omitempty"`
+	EventName    string           `json:"event_name,omitempty"`
 	// Items contained by the trigger in the items property.
 	ContainedItems Items `json:"items,omitempty"`
 	// Hosts that the trigger belongs to in the hosts property.
@@ -118,6 +121,10 @@ func (api *API) TriggersCreate(triggers Triggers) (err error) {
 // TriggersUpdate Wrapper for trigger.update
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/trigger/update
 func (api *API) TriggersUpdate(triggers Triggers) (err error) {
+	// Clear up unwanted paramters (UUID) that are used for update commands
+	for idx := range triggers {
+		triggers[idx].UUID = ""
+	}
 	_, err = api.CallWithError("trigger.update", triggers)
 	return
 }

@@ -1,20 +1,16 @@
 package zabbix
 
-// Macro represent Zabbix User MAcro object
-// https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/object
-type Macro struct {
-	MacroID   string `json:"hostmacroids,omitempty"`
-	HostID    string `json:"hostid"`
-	MacroName string `json:"macro"`
-	Value     string `json:"value"`
+type MediaType struct {
+	MediaID       string `json:"mediatypeid,omitempty"`
+	MediaName     string `json:"name"`
+	MediaType     string `json:"type"`
+	EmailPassword string `json:"passwd"`
 }
 
-// Macros is an array of Macro
-type Macros []Macro
+// Medias is an array of Media
+type Medias []MediaType
 
-// MacrosGet Wrapper for usermacro.get
-// https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/get
-func (api *API) MacrosGet(params Params) (res Macros, err error) {
+func (api *API) MediaGet(params Params) (res Medias, err error) {
 	if _, present := params["output"]; !present {
 		params["output"] = "extend"
 	}
@@ -23,7 +19,7 @@ func (api *API) MacrosGet(params Params) (res Macros, err error) {
 }
 
 // MacroGetByID Get macro by macro ID if there is exactly 1 matching macro
-func (api *API) MacroGetByID(id string) (res *Macro, err error) {
+func (api *API) MediaGetByID(id string) (res *Macro, err error) {
 	triggers, err := api.MacrosGet(Params{"hostmacroids": id})
 	if err != nil {
 		return
@@ -40,7 +36,7 @@ func (api *API) MacroGetByID(id string) (res *Macro, err error) {
 
 // MacrosCreate Wrapper for usermacro.create
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/create
-func (api *API) MacrosCreate(macros Macros) error {
+func (api *API) MediasCreate(macros Macros) error {
 	response, err := api.CallWithError("mediatype.create", macros)
 	if err != nil {
 		return err
@@ -56,7 +52,7 @@ func (api *API) MacrosCreate(macros Macros) error {
 
 // MacrosUpdate Wrapper for usermacro.update
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/update
-func (api *API) MacrosUpdate(macros Macros) (err error) {
+func (api *API) MediasUpdate(macros Macros) (err error) {
 	_, err = api.CallWithError("mediatype.create", macros)
 	return
 }
@@ -64,7 +60,7 @@ func (api *API) MacrosUpdate(macros Macros) (err error) {
 // MacrosDeleteByIDs Wrapper for usermacro.delete
 // Cleans MacroId in all macro elements if call succeed.
 //https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/delete
-func (api *API) MacrosDeleteByIDs(ids []string) (err error) {
+func (api *API) MediasDeleteByIDs(ids []string) (err error) {
 	response, err := api.CallWithError("mediatype.delete", ids)
 
 	result := response.Result.(map[string]interface{})
@@ -77,7 +73,7 @@ func (api *API) MacrosDeleteByIDs(ids []string) (err error) {
 
 // MacrosDelete Wrapper for usermacro.delete
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/delete
-func (api *API) MacrosDelete(macros Macros) (err error) {
+func (api *API) MediasDelete(macros Macros) (err error) {
 	ids := make([]string, len(macros))
 	for i, macro := range macros {
 		ids[i] = macro.MacroID

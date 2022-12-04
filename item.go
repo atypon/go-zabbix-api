@@ -116,11 +116,23 @@ type Item struct {
 	History      string    `json:"history,omitempty"`
 	Trends       string    `json:"trends,omitempty"`
 	TrapperHosts string    `json:"trapper_hosts,omitempty"`
-
+	SnmpOid      string    `json:"snmp_oid,omitempty"`
+	Units        string    `json:"units,omitempty"`
+	Tags         TagsList  `json:"tags,omitempty"`
 	// Fields below used only when creating applications
 	//ApplicationIds []string `json:"applications,omitempty"`
+	ValueMapID string `json:"valuemapid,omitempty"`
+	ItemParent Hosts  `json:"hosts"`
+}
 
-	ItemParent Hosts `json:"hosts"`
+type Tag struct {
+	Tag   string `json:"tag,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+type TagsList []Tag
+
+type Tags struct {
+	Tags TagsList `json:"tags"`
 }
 
 // Items is an array of Item
