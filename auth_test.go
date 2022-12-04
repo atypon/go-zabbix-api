@@ -18,8 +18,8 @@ func TestAuth(t *testing.T) {
 func TestSetAuth(t *testing.T) {
 	api, err := testGetAPI(t).AuthSet(zapi.AuthPrototype{
 		HttpAuthEnabled:   0,
-		HttpCaseSensitive: "1",
-		LdapConfigured:    "0"})
+		HttpCaseSensitive: 1,
+		LdapConfigured:    0})
 
 	if err != nil {
 		t.Fatal(err)
