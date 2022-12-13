@@ -56,12 +56,12 @@ type Trigger struct {
 	TriggerID string `json:"triggerid,omitempty"`
 	//TemplateID   string           `json:"templateid,omitempty"`
 	Expression   string           `json:"expression"`
-	Comment      string           `json:"comments"`
+	Comments     string           `json:"comments"`
 	ManualClose  string           `json:"manual_close,omitempty"`
 	UUID         string           `json:"uuid,omitempty"`
 	RecoveryMode string           `json:"recovery_mode,omitempty"`
 	RecoveryExp  string           `json:"recovery_expression,omitempty"`
-	Name         string           `json:"description,omitempty"`
+	Description  string           `json:"description,omitempty"`
 	Priority     int              `json:"priority,string"`
 	Status       StatusType       `json:"status,string"`
 	Dependencies Triggers         `json:"dependencies,omitempty"`
