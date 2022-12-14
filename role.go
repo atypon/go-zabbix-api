@@ -19,6 +19,8 @@ const (
 	SuperAdminRole
 )
 
+var ValidRoleTypes = []string{"user", "admin", "super_admin"}
+
 type Roles []Role
 
 func (api *API) RolesGet(params Params) (res Roles, err error) {
@@ -84,4 +86,31 @@ func (api *API) RolesUpdate(roles Roles) (err error) {
 
 func (role Role) String() string {
 	return role.Name
+}
+
+func (role Role) GetType() (roleType string, err error) {
+	switch role.Type {
+	case UserRole:
+		return "user", nil
+	case AdminRole:
+		return "admin", nil
+	case SuperAdminRole:
+		return "super_admin", nil
+	default:
+		return "", fmt.Errorf("invalid_user_type %d", role.Type)
+	}
+}
+
+func NewRoleType(roleTypeString string) (roleType RoleType, err error) {
+	switch roleTypeString {
+	case "user":
+		roleType = UserRole
+	case "admin":
+		roleType = AdminRole
+	case "super_admin":
+		roleType = SuperAdminRole
+	default:
+		err = fmt.Errorf("invalid role type: %s", roleTypeString)
+	}
+	return
 }
