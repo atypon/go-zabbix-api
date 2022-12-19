@@ -61,7 +61,7 @@ func (api *API) RolesCreateAndSetIDs(roles Roles) (err error) {
 	result := response.Result.(map[string]interface{})
 	ids := result["roleids"].([]interface{})
 	if len(ids) == 0 {
-		return fmt.Errorf("could not create role %s", roles)
+		return fmt.Errorf("could not create roles")
 	}
 	for i, id := range ids {
 		roles[i].RoleID = id.(string)
@@ -84,11 +84,11 @@ func (api *API) RolesUpdate(roles Roles) (err error) {
 	return
 }
 
-func (role Role) String() string {
+func (role *Role) String() string {
 	return role.Name
 }
 
-func (role Role) GetType() (roleType string, err error) {
+func (role *Role) GetType() (roleType string, err error) {
 	switch role.Type {
 	case UserRole:
 		return "user", nil
@@ -113,4 +113,16 @@ func NewRoleType(roleTypeString string) (roleType RoleType, err error) {
 		err = fmt.Errorf("invalid role type: %s", roleTypeString)
 	}
 	return
+}
+
+func (role *Role) GetID() string {
+	return role.RoleID
+}
+
+func (role *Role) SetID(s string) {
+	role.RoleID = s
+}
+
+func (role *Role) GetAPIModule() string {
+	return "role"
 }
