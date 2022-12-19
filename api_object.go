@@ -28,7 +28,6 @@ func (api *API) CreateAPIObject(object APIObject) (err error) {
 }
 
 func (api *API) ReadAPIObject(object APIObject) (err error) {
-	//objects := []APIObject{}
 	var objects []json.RawMessage
 	method := fmt.Sprintf("%s.get", object.GetAPIModule())
 	idsKey := fmt.Sprintf("%sids", object.GetAPIModule())
