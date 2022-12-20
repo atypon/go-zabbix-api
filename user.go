@@ -1,27 +1,23 @@
 package zabbix
 
-type (
-	// Whether to pause escalation during maintenance periods or not.
-	// "debug_mode" in https://www.zabbix.com/documentation/4.0/manual/api/reference/user/object#user_group
-	UserType int
-)
-
-const (
-	ZabbixUser       UserType = 0
-	ZabbixAdmin      UserType = 1
-	ZabbixSuperAdmin UserType = 2
-)
+import "encoding/json"
 
 // User represent Zabbix user group object
-// https://www.zabbix.com/documentation/4.0/manual/api/reference/user/object
+// https://www.zabbix.com/documentation/6.2/manual/api/reference/user/object
 type User struct {
-	UserID   string   `json:"userid,omitempty"`
-	Alias    string   `json:"alias"`
-	Username string   `json:"username"` // Renamed field alias → username in user object from 5.4↑
-	Name     string   `json:"name,omitempty"`
-	Surname  string   `json:"surname,omitempty"`
-	Type     UserType `json:"type,string,omitempty"`
-	Url      string   `json:"url,omitempty"`
+	UserID   string        `json:"userid,omitempty"`
+	Username string        `json:"username"`
+	Name     string        `json:"name,omitempty"`
+	Surname  string        `json:"surname,omitempty"`
+	RoleID   string        `json:"roleid"`
+	Groups   []UserGroupID `json:"usrgrps"`
+}
+
+type UserGroupID string
+
+func (u UserGroupID) MarshalJSON() (bytes []byte, err error) {
+	data := map[string]string{"usrgrpid": string(u)}
+	return json.Marshal(data)
 }
 
 // Users is an array of User
@@ -35,4 +31,16 @@ func (api *API) UsersGet(params Params) (res Users, err error) {
 	}
 	err = api.CallWithErrorParse("user.get", params, &res)
 	return
+}
+
+func (u *User) GetID() string {
+	return u.UserID
+}
+
+func (u *User) SetID(id string) {
+	u.UserID = id
+}
+
+func (u *User) GetAPIModule() string {
+	return "user"
 }
