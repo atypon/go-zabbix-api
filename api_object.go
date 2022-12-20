@@ -3,6 +3,7 @@ package zabbix
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type APIObject interface {
@@ -13,26 +14,35 @@ type APIObject interface {
 
 func (api *API) CreateAPIObject(object APIObject) (err error) {
 	method := fmt.Sprintf("%s.create", object.GetAPIModule())
-	idsKey := fmt.Sprintf("%sids", object.GetAPIModule())
 	response, err := api.CallWithError(method, object)
 	if err != nil {
 		return
 	}
-	result := response.Result.(map[string]interface{})
-	ids := result[idsKey].([]interface{})
-	if len(ids) == 0 {
-		return fmt.Errorf("could not create object")
+	result := response.Result.(map[string]any)
+	id, err := getIDFromCreateResult(result)
+	object.SetID(id)
+	return
+}
+
+func getIDFromCreateResult(result map[string]any) (id string, err error) {
+	for key, value := range result {
+		if strings.HasSuffix(key, "ids") {
+			ids, ok := value.([]any)
+			if !ok || len(ids) == 0 {
+				err = fmt.Errorf("couldn't find id: %s", ids)
+				return
+			}
+			id = ids[0].(string)
+			break
+		}
 	}
-	object.SetID(ids[0].(string))
 	return
 }
 
 func (api *API) ReadAPIObject(object APIObject) (err error) {
-	//objects := []APIObject{}
 	var objects []json.RawMessage
 	method := fmt.Sprintf("%s.get", object.GetAPIModule())
-	idsKey := fmt.Sprintf("%sids", object.GetAPIModule())
-	err = api.CallWithErrorParse(method, Params{idsKey: object.GetID()}, &objects)
+	err = api.CallWithErrorParse(method, Params{"filter": object}, &objects)
 	if err != nil {
 		return
 	}
