@@ -42,7 +42,11 @@ func getIDFromCreateResult(result map[string]any) (id string, err error) {
 func (api *API) ReadAPIObject(object APIObject) (err error) {
 	var objects []json.RawMessage
 	method := fmt.Sprintf("%s.get", object.GetAPIModule())
-	err = api.CallWithErrorParse(method, Params{"filter": object}, &objects)
+	filter, err := getIDReadFilter(object)
+	if err != nil {
+		return
+	}
+	err = api.CallWithErrorParse(method, Params{"filter": filter}, &objects)
 	if err != nil {
 		return
 	}
@@ -53,6 +57,33 @@ func (api *API) ReadAPIObject(object APIObject) (err error) {
 	err = json.Unmarshal(objects[0], &object)
 	if err != nil {
 		return
+	}
+	return
+}
+
+// Returns a filter as a map of the form:
+//
+//	{
+//			"objectids": object.GetID()
+//	}
+//
+// Used because every zabbix api object has different
+// key for the id
+func getIDReadFilter(object APIObject) (filter map[string]any, err error) {
+	filter = make(map[string]any)
+	var jsonObject map[string]any
+	data, err := json.Marshal(object)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(data, &jsonObject)
+	if err != nil {
+		return
+	}
+	for key, value := range jsonObject {
+		if value == object.GetID() {
+			filter[key] = value
+		}
 	}
 	return
 }
