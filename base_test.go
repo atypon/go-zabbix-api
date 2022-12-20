@@ -1,6 +1,7 @@
 package zabbix_test
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -30,6 +31,10 @@ func init() {
 	if os.Getenv("TEST_ZABBIX_URL") == "" {
 		log.Fatal("Set environment variables TEST_ZABBIX_URL (and optionally TEST_ZABBIX_USER and TEST_ZABBIX_PASSWORD)")
 	}
+	_api, err = createAPIClient()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func testGetHost() string {
@@ -40,7 +45,15 @@ func testGetAPI(t *testing.T) *zapi.API {
 	if _api != nil {
 		return _api
 	}
+	var err error
+	_api, err = createAPIClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return _api
+}
 
+func createAPIClient() (api *zapi.API, err error) {
 	url, user, password := os.Getenv("TEST_ZABBIX_URL"), os.Getenv("TEST_ZABBIX_USER"), os.Getenv("TEST_ZABBIX_PASSWORD")
 	_api = zapi.NewAPI(url)
 	_api.SetClient(http.DefaultClient)
@@ -52,14 +65,13 @@ func testGetAPI(t *testing.T) *zapi.API {
 	if user != "" {
 		auth, err := _api.Login(user, password)
 		if err != nil {
-			t.Fatal(err)
+			return nil, err
 		}
 		if auth == "" {
-			t.Fatal("Login failed")
+			return nil, fmt.Errorf("login failed")
 		}
 	}
-
-	return _api
+	return _api, nil
 }
 
 func TestBadCalls(t *testing.T) {
