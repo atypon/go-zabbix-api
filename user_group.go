@@ -14,7 +14,7 @@ const (
 // UserGroup represent Zabbix user group object
 // https://www.zabbix.com/documentation/4.0/manual/api/reference/usergroup/object
 type UserGroup struct {
-	GroupID             string        `json:"usrgrpid,omitempty"`
+	GroupID             string        `json:"usrgrpid,omitempty" zabbix:"id"`
 	Name                string        `json:"name"`
 	DebugMode           DebugModeType `json:"debug_mode,string,omitempty"`
 	GuiAccess           int           `json:"gui_access,string,omitempty"`

@@ -1,11 +1,14 @@
 package zabbix
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // User represent Zabbix user group object
 // https://www.zabbix.com/documentation/6.2/manual/api/reference/user/object
 type User struct {
-	UserID   string        `json:"userid,omitempty"`
+	UserID   string        `json:"userid,omitempty" zabbix:"id"`
 	Username string        `json:"username"`
 	Name     string        `json:"name,omitempty"`
 	Surname  string        `json:"surname,omitempty"`
@@ -13,10 +16,28 @@ type User struct {
 	Groups   []UserGroupID `json:"usrgrps"`
 }
 
+func (u *User) GetExtraParams() Params {
+	return Params{"selectUsrgrps": []string{"usrgrpid"}}
+}
+
 type UserGroupID string
 
-func (u UserGroupID) MarshalJSON() (bytes []byte, err error) {
-	data := map[string]string{"usrgrpid": string(u)}
+func (u *UserGroupID) UnmarshalJSON(bytes []byte) error {
+	data := make(map[string]string)
+	err := json.Unmarshal(bytes, &data)
+	if err != nil {
+		return err
+	}
+	id, ok := data["usrgrpid"]
+	if !ok {
+		return fmt.Errorf("couldn't find key usergrpid")
+	}
+	*u = UserGroupID(id)
+	return nil
+}
+
+func (u *UserGroupID) MarshalJSON() (bytes []byte, err error) {
+	data := map[string]string{"usrgrpid": string(*u)}
 	return json.Marshal(data)
 }
 
