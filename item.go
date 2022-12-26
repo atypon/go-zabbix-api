@@ -121,14 +121,22 @@ type Item struct {
 	Tags         TagsList  `json:"tags,omitempty"`
 	// Fields below used only when creating applications
 	//ApplicationIds []string `json:"applications,omitempty"`
-	ValueMapID string `json:"valuemapid,omitempty"`
-	ItemParent Hosts  `json:"hosts"`
+	ValueMapID   string           `json:"valuemapid,omitempty"`
+	ItemParent   Hosts            `json:"hosts"`
+	Preprocessor PreprocessorList `json:preprocessor,omitempty`
 }
 
 type Tag struct {
 	Tag   string `json:"tag,omitempty"`
 	Value string `json:"value,omitempty"`
 }
+
+type Preprocessor struct {
+	Type  string `json:"type,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
+type PreprocessorList []Preprocessor
 type TagsList []Tag
 
 type Tags struct {
