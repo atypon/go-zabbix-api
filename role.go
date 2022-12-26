@@ -5,7 +5,7 @@ import (
 )
 
 type Role struct {
-	RoleID   string   `json:"roleid,omitempty"`
+	RoleID   string   `json:"roleid,omitempty" zabbix:"id"`
 	Name     string   `json:"name"`
 	Type     RoleType `json:"type,string"`
 	ReadOnly int      `json:"readonly,string,omitempty"`
