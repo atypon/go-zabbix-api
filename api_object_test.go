@@ -2,13 +2,17 @@ package zabbix_test
 
 import (
 	zapi "github.com/claranet/go-zabbix-api"
+	"reflect"
 	"testing"
 )
 
 func testCRUDAPIObjectOperations(t *testing.T, object zapi.APIObject) {
 	testCreateAPIObject(t, object)
 	defer testDeleteAPIObject(t, object)
-	testReadAPIObject(t, object)
+	reflectType := reflect.ValueOf(object).Elem().Type()
+	emptyObject := reflect.New(reflectType).Interface().(zapi.APIObject)
+	emptyObject.SetID(object.GetID())
+	testReadAPIObject(t, emptyObject)
 	testUpdateAPIObject(t, object)
 }
 
