@@ -40,6 +40,16 @@ const (
 // UserGroups is an array of UserGroup
 type UserGroups []UserGroup
 
+// UserGroupsGet Wrapper for usergroup.get
+// https://www.zabbix.com/documentation/4.0/manual/api/reference/usergroup/get
+func (api *API) UserGroupsGet(params Params) (res UserGroups, err error) {
+	if _, present := params["output"]; !present {
+		params["output"] = "extend"
+	}
+	err = api.CallWithErrorParse("usergroup.get", params, &res)
+	return
+}
+
 func (u *UserGroup) GetID() string {
 	return u.GroupID
 }
