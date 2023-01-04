@@ -40,6 +40,7 @@ type Host struct {
 	GroupIds    HostGroupIDs   `json:"groups,omitempty"`
 	Interfaces  HostInterfaces `json:"interfaces,omitempty"`
 	TemplateIDs TemplateIDs    `json:"templates,omitempty"`
+	Macros      Macros         `json:"macros,omitempty"`
 }
 
 // Hosts is an array of Host
@@ -57,7 +58,7 @@ func (api *API) HostsGet(params Params) (res Hosts, err error) {
 
 // HostsGetByHostGroupIds Gets hosts by host group Ids.
 func (api *API) HostsGetByHostGroupIds(ids []string) (res Hosts, err error) {
-	return api.HostsGet(Params{"groupids": ids})
+	return api.HostsGet(Params{"groupids": ids, "selectMacros": "extend"})
 }
 
 // HostsGetByHostGroups Gets hosts by host groups.
@@ -71,7 +72,11 @@ func (api *API) HostsGetByHostGroups(hostGroups HostGroups) (res Hosts, err erro
 
 // HostGetByID Gets host by Id only if there is exactly 1 matching host.
 func (api *API) HostGetByID(id string) (res *Host, err error) {
-	hosts, err := api.HostsGet(Params{"hostids": id})
+	params := Params{
+		"hostids":      id,
+		"selectMacros": "extend",
+	}
+	hosts, err := api.HostsGet(params)
 	if err != nil {
 		return
 	}
@@ -87,7 +92,7 @@ func (api *API) HostGetByID(id string) (res *Host, err error) {
 
 // HostGetByHost Gets host by Host only if there is exactly 1 matching host.
 func (api *API) HostGetByHost(host string) (res *Host, err error) {
-	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host}})
+	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host}, "selectMacros": "extend"})
 	if err != nil {
 		return
 	}

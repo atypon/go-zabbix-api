@@ -53,6 +53,7 @@ func TestHosts(t *testing.T) {
 	}
 	host.GroupIds = nil
 	host.Interfaces = nil
+	host.Macros = nil
 
 	newName := fmt.Sprintf("%s-%d", testGetHost(), rand.Int())
 	host.Host = newName
@@ -65,6 +66,9 @@ func TestHosts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if len(host2.Macros) == 0 {
+		host2.Macros = nil
+	}
 	if !reflect.DeepEqual(host, host2) {
 		t.Errorf("Hosts are not equal:\n%#v\n%#v", host, host2)
 	}
@@ -72,6 +76,9 @@ func TestHosts(t *testing.T) {
 	host2, err = api.HostGetByID(host.HostID)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if len(host2.Macros) == 0 {
+		host2.Macros = nil
 	}
 	if !reflect.DeepEqual(host, host2) {
 		t.Errorf("Hosts are not equal:\n%#v\n%#v", host, host2)

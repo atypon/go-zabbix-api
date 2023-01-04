@@ -82,20 +82,3 @@ func (api *API) ValueMapUpdate(macros Macros) (err error) {
 //	}
 //	return
 //}
-
-// MacrosDelete Wrapper for usermacro.delete
-// https://www.zabbix.com/documentation/3.2/manual/api/reference/usermacro/delete
-func (api *API) ValueMapDelete(macros Macros) (err error) {
-	ids := make([]string, len(macros))
-	for i, macro := range macros {
-		ids[i] = macro.MacroID
-	}
-
-	err = api.MacrosDeleteByIDs(ids)
-	if err == nil {
-		for i := range macros {
-			macros[i].MacroID = ""
-		}
-	}
-	return
-}
