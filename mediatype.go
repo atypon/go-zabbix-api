@@ -4,7 +4,7 @@ type MediaType struct {
 	MediaID           string         `json:"mediatypeid,omitempty" zabbix:"id"`
 	MediaName         string         `json:"name"`
 	MediaKind         MediaKind      `json:"type,string"`
-	Disabled          int            `json:"status,string,omitempty"`
+	Disabled          int            `json:"status,string"`
 	Description       string         `json:"description,omitempty"`
 	ScriptExecPath    string         `json:"exec_path,omitempty"`
 	ScriptParams      string         `json:"exec_params,omitempty"`
