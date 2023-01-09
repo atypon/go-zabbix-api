@@ -1,7 +1,6 @@
 package zabbix_test
 
 import (
-	"encoding/json"
 	zapi "github.com/claranet/go-zabbix-api"
 	"reflect"
 	"testing"
@@ -18,8 +17,6 @@ func testCRUDAPIObjectOperations(t *testing.T, object zapi.APIObject) {
 }
 
 func testCreateAPIObject(t *testing.T, object zapi.APIObject) {
-	jsonObject, _ := json.Marshal(object)
-	t.Logf("%s", jsonObject)
 	err := _api.CreateAPIObject(object)
 	if err != nil {
 		t.Fatal(err)
@@ -32,14 +29,10 @@ func testReadAPIObject(t *testing.T, object zapi.APIObject) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	jsonObject, _ := json.Marshal(object)
-	t.Logf("%s", jsonObject)
 	t.Logf("Read API object: %s", object)
 }
 
 func testUpdateAPIObject(t *testing.T, object zapi.APIObject) {
-	jsonObject, _ := json.Marshal(object)
-	t.Logf("%s", jsonObject)
 	err := _api.UpdateAPIObject(object)
 	if err != nil {
 		t.Fatal(err)

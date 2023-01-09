@@ -8,7 +8,7 @@ type Proxy struct {
 	Description    string               `json:"description,omitempty"`
 	LastAccess     string               `json:"lastaccess,omitempty"`
 	ProxyAddress   string               `json:"proxy_address,omitempty"`
-	Interface      *ProxyInterface      `json:"interface,omitempty"`
+	Interface      any                  `json:"interface,omitempty"`
 }
 
 type ProxyStatus int
@@ -18,10 +18,11 @@ type ProxyMonitoredHost struct {
 }
 
 type ProxyInterface struct {
-	DNS   string `json:"dns"`
-	IP    string `json:"ip"`
-	Port  string `json:"port"`
-	UseIP int    `json:"useip,string"`
+	InterfaceID string `json:"interfaceid,omitempty"`
+	DNS         string `json:"dns"`
+	IP          string `json:"ip"`
+	Port        string `json:"port"`
+	UseIP       int    `json:"useip,string"`
 }
 
 //func (p ProxyInterface) MarshalJSON() ([]byte, error) {
