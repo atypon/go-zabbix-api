@@ -1,30 +1,19 @@
 package zabbix_test
 
 import (
-	zapi "github.com/claranet/go-zabbix-api"
+	"encoding/json"
 	"testing"
 )
 
 func TestAuth(t *testing.T) {
-	api, err := testGetAPI(t).AuthGet(zapi.Params{})
+	authenticationSettings, err := _api.AuthGet()
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	t.Logf("Auth Result %s", api.Result)
-
-}
-
-func TestSetAuth(t *testing.T) {
-	api, err := testGetAPI(t).AuthSet(zapi.AuthPrototype{
-		HttpAuthEnabled:   0,
-		HttpCaseSensitive: 1,
-		LdapConfigured:    0})
-
+	jsonObject, err := json.Marshal(authenticationSettings)
+	t.Logf("auth get result %s", jsonObject)
+	err = _api.AuthSet(authenticationSettings)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	t.Logf("Auth Setting Result %s", api.Result)
-
 }

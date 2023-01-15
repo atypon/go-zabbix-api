@@ -1,58 +1,40 @@
 package zabbix
 
-import (
-	"log"
-)
-
-type AuthPrototype struct {
-	AuthenticationType      int    `json:"authentication_type,omitempty"`
-	HttpAuthEnabled         int    `json:"http_auth_enabled,omitempty"`
-	HttpLoginForm           int    `json:"http_login_form,omitempty"`
-	HttpStripDomains        string `json:"http_strip_domains,omitempty"`
-	HttpCaseSensitive       int    `json:"http_case_sensitive,omitempty"`
-	LdapConfigured          int    `json:"ldap_configured,omitempty"`
-	LdapCaseSensitive       int    `json:"ldap_case_sensitive,omitempty"`
-	LdapUserdirectoryid     int    `json:"ldap_userdirectoryid,omitempty"`
-	SamlAuthEnabled         int    `json:"saml_auth_enabled,omitempty"`
-	SamlIdpEntityid         string `json:"saml_idp_entityid,omitempty"`
-	SamlSsoUrl              string `json:"saml_sso_url,omitempty"`
-	SamlSloUrl              string `json:"saml_slo_url,omitempty"`
-	SamlUsernameAttribute   string `json:"saml_username_attribute,omitempty"`
-	SamlSpEntityid          string `json:"saml_sp_entityid,omitempty"`
-	SamlNameidFormat        string `json:"saml_nameid_format,omitempty"`
-	SamlSignMessages        int    `json:"saml_sign_messages,omitempty"`
-	SamlSignAssertions      int    `json:"saml_sign_assertions,omitempty"`
-	SamlSignAuthnRequests   int    `json:"saml_sign_authn_requests,omitempty"`
-	SamlSignLogoutRequests  int    `json:"saml_sign_logout_requests,omitempty"`
-	SamlSignLogoutResponses int    `json:"saml_sign_logout_responses,omitempty"`
-	SamlEncryptNameid       int    `json:"saml_encrypt_nameid,omitempty"`
-	SamlEncryptAssertions   int    `json:"saml_encrypt_assertions,omitempty"`
-	SamlCaseSensitive       int    `json:"saml_case_sensitive,omitempty"`
-	PasswdMinLength         int    `json:"passwd_min_length,omitempty"`
-	PasswdCheckRules        string `json:"passwd_check_rules,omitempty"`
+type AuthenticationSettings struct {
+	AuthenticationType      int    `json:"authentication_type,string"`
+	HttpAuthEnabled         int    `json:"http_auth_enabled,string"`
+	HttpLoginForm           int    `json:"http_login_form,string"`
+	HttpStripDomains        string `json:"http_strip_domains"`
+	HttpCaseSensitive       int    `json:"http_case_sensitive,string"`
+	LdapConfigured          int    `json:"ldap_configured,string"`
+	LdapCaseSensitive       int    `json:"ldap_case_sensitive,string"`
+	LdapUserdirectoryid     int    `json:"ldap_userdirectoryid,string,omitempty"`
+	SamlAuthEnabled         int    `json:"saml_auth_enabled,string"`
+	SamlIdpEntityid         string `json:"saml_idp_entityid"`
+	SamlSsoUrl              string `json:"saml_sso_url"`
+	SamlSloUrl              string `json:"saml_slo_url"`
+	SamlUsernameAttribute   string `json:"saml_username_attribute"`
+	SamlSpEntityid          string `json:"saml_sp_entityid"`
+	SamlNameidFormat        string `json:"saml_nameid_format"`
+	SamlSignMessages        int    `json:"saml_sign_messages,string"`
+	SamlSignAssertions      int    `json:"saml_sign_assertions,string"`
+	SamlSignAuthnRequests   int    `json:"saml_sign_authn_requests,string"`
+	SamlSignLogoutRequests  int    `json:"saml_sign_logout_requests,string"`
+	SamlSignLogoutResponses int    `json:"saml_sign_logout_responses,string"`
+	SamlEncryptNameid       int    `json:"saml_encrypt_nameid,string"`
+	SamlEncryptAssertions   int    `json:"saml_encrypt_assertions,string"`
+	SamlCaseSensitive       int    `json:"saml_case_sensitive,string"`
+	PasswdMinLength         int    `json:"passwd_min_length,string,omitempty"`
+	PasswdCheckRules        int    `json:"passwd_check_rules,string"`
 }
 
-func (api *API) AuthGet(params Params) (res Response, err error) {
-	if _, present := params["output"]; !present {
-		params["output"] = "extend"
-	}
-	res, err = api.CallWithError("authentication.get", params)
-
-	if err != nil {
-		return
-	}
-
+func (api *API) AuthGet() (authenticationSettings *AuthenticationSettings, err error) {
+	authenticationSettings = &AuthenticationSettings{}
+	err = api.CallWithErrorParse("authentication.get", Params{"output": "extend"}, authenticationSettings)
 	return
 }
 
-func (api *API) AuthSet(params AuthPrototype) (res Response, err error) {
-
-	res, err = api.CallWithError("authentication.update", params)
-
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
-
+func (api *API) AuthSet(authenticationSettings *AuthenticationSettings) (err error) {
+	_, err = api.CallWithError("authentication.update", authenticationSettings)
 	return
 }

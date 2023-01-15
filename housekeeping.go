@@ -27,7 +27,7 @@ type HousekeepingSettings struct {
 
 func (api *API) HousekeepingGet() (houseKeeping *HousekeepingSettings, err error) {
 	houseKeeping = &HousekeepingSettings{}
-	err = api.CallWithErrorParse("houasekeeping.get", Params{"output": "extend"}, houseKeeping)
+	err = api.CallWithErrorParse("housekeeping.get", Params{"output": "extend"}, houseKeeping)
 	return
 }
 
