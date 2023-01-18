@@ -11,23 +11,23 @@ import (
 
 func testCreateHost(group *zapi.HostGroup, t *testing.T) *zapi.Host {
 	name := fmt.Sprintf("%s-%d", testGetHost(), rand.Int())
-	iface := zapi.HostInterface{DNS: name, Port: "42", Type: zapi.Agent, UseIP: 0, Main: 1}
-	hosts := zapi.Hosts{{
+	iface := zapi.HostInterface{DNS: name, Port: "42", Type: zapi.AgentInterface, UseIP: 0, Main: 1}
+	host := &zapi.Host{
 		Host:       name,
 		Name:       "Name for " + name,
 		GroupIds:   zapi.HostGroupIDs{{group.GroupID}},
 		Interfaces: zapi.HostInterfaces{iface},
-	}}
+	}
 
-	err := testGetAPI(t).HostsCreate(hosts)
+	err := testGetAPI(t).CreateAPIObject(host)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return &hosts[0]
+	return host
 }
 
 func testDeleteHost(host *zapi.Host, t *testing.T) {
-	err := testGetAPI(t).HostsDelete(zapi.Hosts{*host})
+	err := testGetAPI(t).DeleteAPIObject(host)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,32 +48,27 @@ func TestHosts(t *testing.T) {
 	}
 
 	host := testCreateHost(group, t)
+	// to fill interface IDs
+	err = api.ReadAPIObject(host)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	if host.HostID == "" || host.Host == "" {
 		t.Errorf("Something is empty: %#v", host)
 	}
 	host.GroupIds = nil
-	host.Interfaces = nil
 	host.Macros = nil
 
 	newName := fmt.Sprintf("%s-%d", testGetHost(), rand.Int())
 	host.Host = newName
-	err = api.HostsUpdate(zapi.Hosts{*host})
+	err = api.UpdateAPIObject(host)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	host2, err := api.HostGetByHost(host.Host)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(host2.Macros) == 0 {
-		host2.Macros = nil
-	}
-	if !reflect.DeepEqual(host, host2) {
-		t.Errorf("Hosts are not equal:\n%#v\n%#v", host, host2)
-	}
-
-	host2, err = api.HostGetByID(host.HostID)
+	host2 := &zapi.Host{HostID: host.HostID}
+	err = api.ReadAPIObject(host2)
 	if err != nil {
 		t.Fatal(err)
 	}

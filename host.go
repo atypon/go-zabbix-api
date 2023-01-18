@@ -29,7 +29,7 @@ const (
 // Host represent Zabbix host object
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/host/object
 type Host struct {
-	HostID    string        `json:"hostid,omitempty"`
+	HostID    string        `json:"hostid,omitempty" zabbix:"id"`
 	Host      string        `json:"host"`
 	Available AvailableType `json:"available,string"`
 	Error     string        `json:"error"`
@@ -58,7 +58,7 @@ func (api *API) HostsGet(params Params) (res Hosts, err error) {
 
 // HostsGetByHostGroupIds Gets hosts by host group Ids.
 func (api *API) HostsGetByHostGroupIds(ids []string) (res Hosts, err error) {
-	return api.HostsGet(Params{"groupids": ids, "selectMacros": "extend"})
+	return api.HostsGet(Params{"groupids": ids, "selectMacros": "extend", "selectInterfaces": "extend"})
 }
 
 // HostsGetByHostGroups Gets hosts by host groups.
@@ -73,8 +73,9 @@ func (api *API) HostsGetByHostGroups(hostGroups HostGroups) (res Hosts, err erro
 // HostGetByID Gets host by Id only if there is exactly 1 matching host.
 func (api *API) HostGetByID(id string) (res *Host, err error) {
 	params := Params{
-		"hostids":      id,
-		"selectMacros": "extend",
+		"hostids":          id,
+		"selectMacros":     "extend",
+		"selectInterfaces": "extend",
 	}
 	hosts, err := api.HostsGet(params)
 	if err != nil {
@@ -92,7 +93,7 @@ func (api *API) HostGetByID(id string) (res *Host, err error) {
 
 // HostGetByHost Gets host by Host only if there is exactly 1 matching host.
 func (api *API) HostGetByHost(host string) (res *Host, err error) {
-	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host}, "selectMacros": "extend"})
+	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host}, "selectMacros": "extend", "selectInterfaces": "extend"})
 	if err != nil {
 		return
 	}
@@ -172,4 +173,23 @@ func (api *API) HostsDeleteByIds(ids []string) (err error) {
 		err = &ExpectedMore{len(ids), len(hostids)}
 	}
 	return
+}
+
+func (h *Host) GetID() string {
+	return h.HostID
+}
+
+func (h *Host) SetID(id string) {
+	h.HostID = id
+}
+
+func (h *Host) GetAPIModule() string {
+	return "host"
+}
+
+func (h *Host) GetExtraParams() Params {
+	return Params{
+		"selectMacros":     "extend",
+		"selectInterfaces": "extend",
+	}
 }
