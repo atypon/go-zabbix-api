@@ -21,7 +21,7 @@ func testCreateAPIObject(t *testing.T, object zapi.APIObject) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("Created API object: %s", object)
+	t.Logf("Created API object: %+v", object)
 }
 
 func testReadAPIObject(t *testing.T, object zapi.APIObject) {
@@ -29,7 +29,7 @@ func testReadAPIObject(t *testing.T, object zapi.APIObject) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("Read API object: %s", object)
+	t.Logf("Read API object: %+v", object)
 }
 
 func testUpdateAPIObject(t *testing.T, object zapi.APIObject) {
@@ -37,7 +37,7 @@ func testUpdateAPIObject(t *testing.T, object zapi.APIObject) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("Updated API object: %s", object)
+	t.Logf("Updated API object: %+v", object)
 }
 
 func testDeleteAPIObject(t *testing.T, object zapi.APIObject) {
@@ -49,5 +49,5 @@ func testDeleteAPIObject(t *testing.T, object zapi.APIObject) {
 	if err == nil {
 		t.Fatal("Could not delete object")
 	}
-	t.Logf("Deleted API object: %s", object)
+	t.Logf("Deleted API object: %+v", object)
 }

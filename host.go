@@ -29,22 +29,31 @@ const (
 // Host represent Zabbix host object
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/host/object
 type Host struct {
-	HostID    string        `json:"hostid,omitempty" zabbix:"id"`
-	Host      string        `json:"host"`
-	Available AvailableType `json:"available,string"`
-	Error     string        `json:"error"`
-	Name      string        `json:"name"`
-	Status    StatusType    `json:"status,string"`
-
-	// Fields below used only when creating hosts
-	GroupIds    HostGroupIDs   `json:"groups,omitempty"`
-	Interfaces  HostInterfaces `json:"interfaces,omitempty"`
-	TemplateIDs TemplateIDs    `json:"templates,omitempty"`
-	Macros      Macros         `json:"macros,omitempty"`
+	HostID        string         `json:"hostid,omitempty" zabbix:"id"`
+	Host          string         `json:"host"`
+	Name          string         `json:"name"`
+	Status        StatusType     `json:"status,string"`
+	Description   string         `json:"description"`
+	InventoryMode int            `json:"inventory_mode,string"`
+	IPMIAuthType  int            `json:"ipmi_authtype,string"`
+	IPMIPassword  string         `json:"ipmi_password"`
+	IPMIUsername  string         `json:"ipmi_username"`
+	ProxyHostID   string         `json:"proxy_hostid,omitempty"`
+	Tags          []HostTag      `json:"tags,omitempty"`
+	GroupIds      HostGroupIDs   `json:"groups,omitempty"`
+	Interfaces    HostInterfaces `json:"interfaces,omitempty"`
+	TemplateIDs   TemplateIDs    `json:"templates,omitempty"`
+	Macros        Macros         `json:"macros,omitempty"`
 }
 
 // Hosts is an array of Host
 type Hosts []Host
+
+type HostTag struct {
+	Tag       string `json:"tag"`
+	Value     string `json:"value"`
+	Automatic int    `json:"automatic,string"`
+}
 
 // HostsGet Wrapper for host.get
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/host/get
@@ -175,21 +184,25 @@ func (api *API) HostsDeleteByIds(ids []string) (err error) {
 	return
 }
 
-func (h *Host) GetID() string {
-	return h.HostID
+func (host *Host) GetID() string {
+	return host.HostID
 }
 
-func (h *Host) SetID(id string) {
-	h.HostID = id
+func (host *Host) SetID(id string) {
+	host.HostID = id
 }
 
-func (h *Host) GetAPIModule() string {
+func (host *Host) GetAPIModule() string {
 	return "host"
 }
 
-func (h *Host) GetExtraParams() Params {
+func (host *Host) GetExtraParams() Params {
 	return Params{
 		"selectMacros":     "extend",
 		"selectInterfaces": "extend",
+		"selectTags":       "extend",
+		"selectGroups":     []string{"groupid"},
+		"templated_hosts":  nil,
+		//"selectParentTemplates": "extend",
 	}
 }

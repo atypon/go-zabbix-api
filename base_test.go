@@ -35,6 +35,9 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if os.Getenv("DEBUG") != "" {
+		_api.Logger = log.Default()
+	}
 }
 
 func testGetHost() string {

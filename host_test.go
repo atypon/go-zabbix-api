@@ -3,7 +3,6 @@ package zabbix_test
 import (
 	"fmt"
 	"math/rand"
-	"reflect"
 	"testing"
 
 	zapi "github.com/claranet/go-zabbix-api"
@@ -34,66 +33,19 @@ func testDeleteHost(host *zapi.Host, t *testing.T) {
 }
 
 func TestHosts(t *testing.T) {
-	api := testGetAPI(t)
+	//api := testGetAPI(t)
 
 	group := testCreateHostGroup(t)
 	defer testDeleteHostGroup(group, t)
-
-	hosts, err := api.HostsGetByHostGroups(zapi.HostGroups{*group})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(hosts) != 0 {
-		t.Errorf("Bad hosts: %#v", hosts)
-	}
+	templateGroup := testCreateTemplateGroup(t)
+	defer testDeleteTemplateGroup(templateGroup, t)
+	template := testCreateTemplate(templateGroup, t)
+	defer testDeleteTemplate(template, t)
 
 	host := testCreateHost(group, t)
-	// to fill interface IDs
-	err = api.ReadAPIObject(host)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if host.HostID == "" || host.Host == "" {
-		t.Errorf("Something is empty: %#v", host)
-	}
-	host.GroupIds = nil
-	host.Macros = nil
-
-	newName := fmt.Sprintf("%s-%d", testGetHost(), rand.Int())
-	host.Host = newName
-	err = api.UpdateAPIObject(host)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	host2 := &zapi.Host{HostID: host.HostID}
-	err = api.ReadAPIObject(host2)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(host2.Macros) == 0 {
-		host2.Macros = nil
-	}
-	if !reflect.DeepEqual(host, host2) {
-		t.Errorf("Hosts are not equal:\n%#v\n%#v", host, host2)
-	}
-
-	hosts, err = api.HostsGetByHostGroups(zapi.HostGroups{*group})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(hosts) != 1 {
-		t.Errorf("Bad hosts: %#v", hosts)
-	}
-
-	testDeleteHost(host, t)
-
-	hosts, err = api.HostsGetByHostGroups(zapi.HostGroups{*group})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(hosts) != 0 {
-		t.Errorf("Bad hosts: %#v", hosts)
-	}
+	defer testDeleteAPIObject(t, host)
+	testReadAPIObject(t, host)
+	host.TemplateIDs = zapi.TemplateIDs{zapi.TemplateID{TemplateID: template.TemplateID}}
+	//testCRUDAPIObjectOperations(t, host)
+	testUpdateAPIObject(t, host)
 }

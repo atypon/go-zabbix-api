@@ -20,16 +20,40 @@ const (
 )
 
 // HostInterface represents zabbix host interface type
-// https://www.zabbix.com/documentation/3.2/manual/api/reference/hostinterface/object
 type HostInterface struct {
-	InterfaceID string        `json:"interfaceid,omitempty"`
+	InterfaceID string        `json:"interfaceid,omitempty" zabbix:"id"`
 	DNS         string        `json:"dns"`
 	IP          string        `json:"ip"`
 	Main        int           `json:"main,string"`
 	Port        string        `json:"port"`
 	Type        InterfaceType `json:"type,string"`
 	UseIP       int           `json:"useip,string"`
+	HostID      string        `json:"hostid"`
+	Details     any           `json:"details"`
 }
 
-// HostInterfaces is an array of HostInterface
 type HostInterfaces []HostInterface
+
+type SNMPDetails struct {
+	Version        int    `json:"version,string"`
+	Bulk           int    `json:"bulk,string,omitempty"`
+	Community      string `json:"community,omitempty"`
+	SecurityName   string `json:"securityname,omitempty"`
+	SecurityLevel  string `json:"securitylevel,omitempty"`
+	AuthPassphrase string `json:"authpassphrase,omitempty"`
+	AuthProtocol   string `json:"authprotocol,omitempty"`
+	PrivProtocol   string `json:"privprotocol,omitempty"`
+	ContextName    string `json:"contextname,omitempty"`
+}
+
+func (hostInterface *HostInterface) GetID() string {
+	return hostInterface.InterfaceID
+}
+
+func (hostInterface *HostInterface) SetID(id string) {
+	hostInterface.InterfaceID = id
+}
+
+func (hostInterface *HostInterface) GetAPIModule() string {
+	return "hostinterface"
+}
