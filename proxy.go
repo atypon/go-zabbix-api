@@ -6,7 +6,6 @@ type Proxy struct {
 	MonitoredHosts []ProxyMonitoredHost `json:"monitored_hosts,omitempty"`
 	Status         ProxyStatus          `json:"status,string"`
 	Description    string               `json:"description,omitempty"`
-	LastAccess     string               `json:"lastaccess,omitempty"`
 	ProxyAddress   string               `json:"proxy_address,omitempty"`
 	Interface      any                  `json:"interface,omitempty"`
 }
