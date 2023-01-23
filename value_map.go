@@ -44,3 +44,7 @@ func (v *ValueMap) SetID(id string) {
 func (v *ValueMap) GetAPIModule() string {
 	return "valuemap"
 }
+
+func (v *ValueMap) GetExtraParams() Params {
+	return Params{"selectMappings": "extend"}
+}
