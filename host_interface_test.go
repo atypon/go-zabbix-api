@@ -11,7 +11,7 @@ func TestHostInterface_(t *testing.T) {
 	host := testCreateHost(group, t)
 	defer testDeleteHost(host, t)
 	snmpDetails := &zabbix.SNMPDetails{
-		Version:   "1",
+		Version:   "3",
 		Community: "test",
 	}
 	hostInterface := &zabbix.HostInterface{
