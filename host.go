@@ -38,21 +38,21 @@ type Host struct {
 	IPMIAuthType  int            `json:"ipmi_authtype,string"`
 	IPMIPassword  string         `json:"ipmi_password"`
 	IPMIUsername  string         `json:"ipmi_username"`
+	IPMIPrivilege int            `json:"ipmi_privilege,string"`
 	ProxyHostID   string         `json:"proxy_hostid,omitempty"`
-	Tags          []HostTag      `json:"tags,omitempty"`
-	GroupIds      HostGroupIDs   `json:"groups,omitempty"`
-	Interfaces    HostInterfaces `json:"interfaces,omitempty"`
-	TemplateIDs   TemplateIDs    `json:"templates,omitempty"`
-	Macros        Macros         `json:"macros,omitempty"`
+	Tags          []HostTag      `json:"tags"`
+	GroupIds      HostGroupIDs   `json:"groups"`
+	Interfaces    HostInterfaces `json:"interfaces"`
+	TemplateIDs   TemplateIDs    `json:"templates"`
+	Macros        []Macro        `json:"macros"`
 }
 
 // Hosts is an array of Host
 type Hosts []Host
 
 type HostTag struct {
-	Tag       string `json:"tag"`
-	Value     string `json:"value"`
-	Automatic int    `json:"automatic,string"`
+	Tag   string `json:"tag"`
+	Value string `json:"value"`
 }
 
 // HostsGet Wrapper for host.get

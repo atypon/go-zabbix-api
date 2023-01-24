@@ -12,10 +12,13 @@ func testCreateHost(group *zapi.HostGroup, t *testing.T) *zapi.Host {
 	name := fmt.Sprintf("%s-%d", testGetHost(), rand.Int())
 	iface := zapi.HostInterface{DNS: name, Port: "42", Type: zapi.AgentInterface, UseIP: 0, Main: 1}
 	host := &zapi.Host{
-		Host:       name,
-		Name:       "Name for " + name,
-		GroupIds:   zapi.HostGroupIDs{{group.GroupID}},
-		Interfaces: zapi.HostInterfaces{iface},
+		Host:        name,
+		Name:        "Name for " + name,
+		GroupIds:    zapi.HostGroupIDs{{group.GroupID}},
+		Interfaces:  zapi.HostInterfaces{iface},
+		Macros:      []zapi.Macro{},
+		Tags:        []zapi.HostTag{},
+		TemplateIDs: []zapi.TemplateID{},
 	}
 
 	err := testGetAPI(t).CreateAPIObject(host)

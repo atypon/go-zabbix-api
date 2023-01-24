@@ -28,15 +28,15 @@ type HostInterface struct {
 	Port        string        `json:"port"`
 	Type        InterfaceType `json:"type,string"`
 	UseIP       int           `json:"useip,string"`
-	HostID      string        `json:"hostid"`
+	HostID      string        `json:"hostid,omitempty"`
 	Details     any           `json:"details"`
 }
 
 type HostInterfaces []HostInterface
 
 type SNMPDetails struct {
-	Version        int    `json:"version,string"`
-	Bulk           int    `json:"bulk,string,omitempty"`
+	Version        string `json:"version"`
+	Bulk           string `json:"bulk,omitempty"`
 	Community      string `json:"community,omitempty"`
 	SecurityName   string `json:"securityname,omitempty"`
 	SecurityLevel  string `json:"securitylevel,omitempty"`
