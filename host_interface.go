@@ -36,13 +36,13 @@ type HostInterfaces []HostInterface
 
 type SNMPDetails struct {
 	Version        string `json:"version"`
-	Bulk           int    `json:"bulk,string,omitempty"`
+	Bulk           int    `json:"bulk,string"`
 	Community      string `json:"community"`
 	SecurityName   string `json:"securityname"`
-	SecurityLevel  int    `json:"securitylevel,string,omitempty"`
+	SecurityLevel  int    `json:"securitylevel,string"`
 	AuthPassphrase string `json:"authpassphrase"`
-	AuthProtocol   int    `json:"authprotocol,string,omitempty"`
-	PrivProtocol   int    `json:"privprotocol,string,omitempty"`
+	AuthProtocol   int    `json:"authprotocol,string"`
+	PrivProtocol   int    `json:"privprotocol,string"`
 	ContextName    string `json:"contextname"`
 }
 
