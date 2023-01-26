@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"sync/atomic"
@@ -120,8 +120,15 @@ func (api *API) callBytes(method string, params interface{}) (b []byte, err erro
 		return
 	}
 	defer res.Body.Close()
-
-	b, err = ioutil.ReadAll(res.Body)
+	b, err = io.ReadAll(res.Body)
+	if err != nil {
+		err = fmt.Errorf("%s, %s", res.Status, err)
+		return
+	}
+	if res.StatusCode != 200 {
+		err = fmt.Errorf("%s", res.Status)
+		return
+	}
 	api.printf("Response (%d): %s", res.StatusCode, b)
 	return
 }
