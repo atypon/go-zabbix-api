@@ -123,7 +123,7 @@ type Item struct {
 	//ApplicationIds []string `json:"applications,omitempty"`
 	ValueMapID   string           `json:"valuemapid,omitempty"`
 	ItemParent   Hosts            `json:"hosts"`
-	Preprocessor PreprocessorList `json:preprocessor,omitempty`
+	Preprocessor PreprocessorList `json:"preprocessing,omitempty"`
 }
 
 type Tag struct {
@@ -132,8 +132,10 @@ type Tag struct {
 }
 
 type Preprocessor struct {
-	Type  string `json:"type,omitempty"`
-	Value string `json:"value,omitempty"`
+	Type               any    `json:"type,omitempty"`
+	Params             string `json:"params,omitempty"`
+	ErrorHandler       string `json:"error_handler,omitempty"`
+	ErrorHandlerParams string `json:"error_handler_params"`
 }
 
 type PreprocessorList []Preprocessor
