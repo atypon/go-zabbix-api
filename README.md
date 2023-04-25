@@ -56,7 +56,7 @@ For more information, please see issues [ZBX-3783](https://support.zabbix.com/br
 ### Run tests
 
 ```bash
-export TEST_ZABBIX_URL=http://localhost:8080/zabbix/api_jsonrpc.php
+export TEST_ZABBIX_URL=https://zabbix-test.literatumonline.com/api_jsonrpc.php
 export TEST_ZABBIX_USER=Admin
 export TEST_ZABBIX_PASSWORD=zabbix
 export TEST_ZABBIX_VERBOSE=1

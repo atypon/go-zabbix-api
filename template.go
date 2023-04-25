@@ -3,15 +3,15 @@ package zabbix
 // Template represent Zabbix Template type returned from Zabbix API
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/template/object
 type Template struct {
-	TemplateID      string     `json:"templateid,omitempty"`
-	Host            string     `json:"host"`
-	Description     string     `json:"description,omitempty"`
-	Name            string     `json:"name,omitempty"`
-	Groups          HostGroups `json:"groups"`
-	UserMacros      Macros     `json:"macros"`
-	LinkedTemplates Templates  `json:"templates,omitempty"`
-	TemplatesClear  Templates  `json:"templates_clear,omitempty"`
-	LinkedHosts     Hosts      `json:"hosts,omitempty"`
+	TemplateID      string         `json:"templateid,omitempty"`
+	Host            string         `json:"host"`
+	Description     string         `json:"description,omitempty"`
+	Name            string         `json:"name,omitempty"`
+	Groups          TemplateGroups `json:"groups"`
+	UserMacros      Macros         `json:"macros,omitempty"`
+	LinkedTemplates Templates      `json:"templates,omitempty"`
+	TemplatesClear  Templates      `json:"templates_clear,omitempty"`
+	LinkedHosts     Hosts          `json:"hosts,omitempty"`
 }
 
 // Templates is an Array of Template structs.

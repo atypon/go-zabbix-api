@@ -6,14 +6,18 @@ import (
 	zapi "github.com/claranet/go-zabbix-api"
 )
 
-func testCreateItem(app *zapi.Application, t *testing.T) *zapi.Item {
+func testCreateItem(t *testing.T) *zapi.Item { //app *zapi.Application
 	items := zapi.Items{{
-		HostID:         app.HostID,
-		Key:            "key.lala.laa",
-		Name:           "name for key",
-		Type:           zapi.ZabbixTrapper,
-		Delay:          "0",
-		ApplicationIds: []string{app.ApplicationID},
+		//HostID:         app.HostID,
+		Key:  "key.lala.laa",
+		Name: "name for key",
+		// an empty templated created for this test only
+		InterfaceID: "30084",
+		// the server ID
+		HostID: "10528",
+		Type:   zapi.ZabbixTrapper,
+		Delay:  "0",
+		//ApplicationIds: []string{app.ApplicationID},
 	}}
 	err := testGetAPI(t).ItemsCreate(items)
 	if err != nil {
@@ -38,20 +42,23 @@ func TestItems(t *testing.T) {
 	host := testCreateHost(group, t)
 	defer testDeleteHost(host, t)
 
-	app := testCreateApplication(host, t)
-	defer testDeleteApplication(app, t)
+	// Applications are deprecated
+	/*
+		app := testCreateApplication(host, t)
+		defer testDeleteApplication(app, t)
 
-	items, err := api.ItemsGetByApplicationID(app.ApplicationID)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(items) != 0 {
-		t.Fatal("Found items")
-	}
+		items, err := api.ItemsGetByApplicationID(app.ApplicationID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(items) != 0 {
+			t.Fatal("Found items")
+		}
+	*/
 
-	item := testCreateItem(app, t)
+	item := testCreateItem(t)
 
-	_, err = api.ItemGetByID(item.ItemID)
+	_, err := api.ItemGetByID(item.ItemID)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -17,7 +17,7 @@ const (
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/hostgroup/object
 type HostGroup struct {
 	GroupID  string       `json:"groupid,omitempty"`
-	Name     string       `json:"name"`
+	Name     string       `json:"name,omitempty"`
 	Internal InternalType `json:"internal,omitempty,string"`
 }
 
@@ -36,6 +36,9 @@ type HostGroupIDs []HostGroupID
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/hostgroup/get
 func (api *API) HostGroupsGet(params Params) (res HostGroups, err error) {
 	if _, present := params["output"]; !present {
+		params["output"] = "extend"
+	}
+	if params["output"] != "extend" {
 		params["output"] = "extend"
 	}
 	err = api.CallWithErrorParse("hostgroup.get", params, &res)
